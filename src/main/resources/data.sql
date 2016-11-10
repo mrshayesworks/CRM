@@ -9,13 +9,13 @@ insert into java302.users (first_name, last_name, password, email, phone_number,
 insert into java302.users (first_name, last_name, password, email, phone_number, active) values ('Jason', 'Fredrick', 'pass123', 'jfredrick@smoothie.com', '1234165346', true);
 insert into java302.users (first_name, last_name, password, email, phone_number, active) values ('Evelynn', 'Rogers', 'eve123', 'erogers@smoothie.com', '1234166269', true);
 
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'zsmith@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'jwilliams@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'sbjergson@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'ajohns@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'mpabst@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'danderson@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'dcarter@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'aweston@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'jfredrick@smoothie.com'), 'USER');
-insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'erogers@smoothie.com'), 'USER');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'zsmith@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'jwilliams@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'sbjergson@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'ajohns@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'mpabst@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'danderson@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'dcarter@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'aweston@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'jfredrick@smoothie.com'), 'ADMIN');
+insert into java302.user_roles (user_id, role) values ((select id from java302.users where email = 'erogers@smoothie.com'), 'ADMIN');
