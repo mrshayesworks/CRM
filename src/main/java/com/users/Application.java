@@ -32,5 +32,6 @@ public class Application {
 	public SpringSecurityDialect securityDialect() {
 		return new SpringSecurityDialect();
 	}
+	
 
 }

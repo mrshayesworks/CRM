@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import com.users.repositories.ContactRepository;
 import com.users.repositories.UserRepository;
 //This imports the enum info over. to declare any user and admin info//
 //This particular part makes you authenticate yourself before giving you access//
@@ -17,6 +18,9 @@ import com.users.repositories.UserRepository;
 public class PermissionService {
 	@Autowired
 	private UserRepository userRepo;
+	
+	@Autowired
+	private ContactRepository contactRepo;
 
 	private UsernamePasswordAuthenticationToken getToken() {
 		return (UsernamePasswordAuthenticationToken) getContext().getAuthentication();
@@ -33,9 +37,17 @@ public class PermissionService {
 
 
 //This is showing us that an Admin can edit info on a user//
-
 	public boolean canEditUser(long userId) {
-	long currentUserId = userRepo.findByEmail(getToken().getName()).get(0).getId();
-	return hasRole(ADMIN) || (hasRole(USER) && currentUserId == userId);
+		return hasRole(ADMIN) || (hasRole(USER) && findCurrentUserId() == userId);
 	}
+
+	public boolean canEditContact(long contactId) {
+		return hasRole(USER) && contactRepo.findByUserIdAndId(findCurrentUserId(), contactId) != null;
+	}
+	//TODO What is this doing//
+	
+	public long findCurrentUserId() {
+		return userRepo.findByEmail(getToken().getName()).get(0).getId();
+	}
+	//TODO Explain this. What is this method doing//
 }
