@@ -1,11 +1,14 @@
 package com.users.controller;
 
+import static com.users.security.Role.ROLE_ADMIN;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
@@ -35,18 +38,24 @@ public class IndexController {
 	
 	@Autowired
 	private PermissionService permissionService;
-	
+
 	@RequestMapping("/greeting")
 	public String greeting(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
 		model.addAttribute("name", name);
 		model.addAttribute("repoCount", userRepo.count());
 		return "greeting";
 	}
-
+	
 	@RequestMapping("/")
-	public String listing(Model model) {
+	public String home(Model model) {
+		return permissionService.hasRole(ROLE_ADMIN) ? "redirect:/users" : "redirect:/contacts";
+	}
+
+	@Secured("ROLE_ADMIN")
+	@RequestMapping("/users")
+	public String listUsers(Model model) {
 		model.addAttribute("users", userRepo.findAllByOrderByFirstNameAscLastNameAsc());
-		return "list";
+		return "listUsers";
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -54,14 +63,18 @@ public class IndexController {
 		return new ModelAndView("login", "error", error);
 	}
 	
+	@RequestMapping("/myprofile")
+	public String myprofile(Model model) {
+		return profile(permissionService.findCurrentUserId(), model);
+	}
 
 	@RequestMapping("/user/{userId}")
 	public String profile(@PathVariable long userId, Model model) {
 		model.addAttribute("user", userRepo.findOne(userId));
-	
-		if(!permissionService.canEditUser(userId)) {
-			log.warn("Cannot allow user to edit " + userId);
-			return "profile";
+
+		if(!permissionService.canAccessUser(userId)) {
+			log.warn("Cannot allow user to view " + userId);
+			return "redirect:/";
 		}
 
 		List<UserImage> images = userImageRepo.findByUserId(userId);
@@ -70,14 +83,13 @@ public class IndexController {
 		}
 		model.addAttribute("permissions", permissionService);
 		return "profile";
-}
+	}
 
 	@RequestMapping(value = "/user/{userId}/edit", method = RequestMethod.GET)
 	public String profileEdit(@PathVariable long userId, Model model) {
 		model.addAttribute("user", userRepo.findOne(userId));
 		
-	
-		if(!permissionService.canEditUser(userId)) {
+		if(!permissionService.canAccessUser(userId)) {
 			log.warn("Cannot allow user to edit " + userId);
 			return "profile";
 		}
@@ -96,6 +108,11 @@ public class IndexController {
 			@RequestParam("file") MultipartFile file,
 			Model model) {
 
+		if(!permissionService.canAccessUser(userId)) {
+			log.warn("Cannot allow user to edit " + userId);
+			return "profile";
+		}
+		
 		log.debug("Saving user " + user);
 		userRepo.save(user);
 		model.addAttribute("message", "User " + user.getEmail() + " saved.");

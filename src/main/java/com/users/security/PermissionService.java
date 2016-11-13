@@ -1,8 +1,8 @@
 package com.users.security;
 
-import static com.users.security.Role.ADMIN;
-import static com.users.security.Role.USER;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
+import static com.users.security.Role.ROLE_ADMIN;
+import static com.users.security.Role.ROLE_USER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,13 +37,17 @@ public class PermissionService {
 
 
 //This is showing us that an Admin can edit info on a user//
-	public boolean canEditUser(long userId) {
-		return hasRole(ADMIN) || (hasRole(USER) && findCurrentUserId() == userId);
+
+
+	public boolean canAccessUser(long userId) {
+		return hasRole(ROLE_ADMIN) || (hasRole(ROLE_USER) && findCurrentUserId() == userId);
 	}
 
 	public boolean canEditContact(long contactId) {
-		return hasRole(USER) && contactRepo.findByUserIdAndId(findCurrentUserId(), contactId) != null;
+		return hasRole(ROLE_USER)
+				&& contactRepo.findByUserIdAndId(findCurrentUserId(), contactId) != null;
 	}
+
 	//TODO What is this doing//
 	
 	public long findCurrentUserId() {
