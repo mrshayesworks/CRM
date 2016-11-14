@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS java302.users (
   password VARCHAR(45) NOT NULL,
   email VARCHAR(128) NULL,
   phone_number VARCHAR(10) NULL,
+  facebook_url VARCHAR(45) NULL,
+  twitter_handle VARCHAR(200) NULL,
   active tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (id));
 
@@ -32,21 +34,23 @@ CREATE TABLE IF NOT EXISTS java302.user_properties (
   prop_value VARCHAR(255) NOT NULL,
   PRIMARY KEY (id));
 
-
 CREATE TABLE IF NOT EXISTS java302.contacts (
- id INT UNSIGNED NOT NULL AUTO_INCREMENT,
- first_name VARCHAR(45) NOT NULL,
- last_name VARCHAR(45) NOT NULL,
- email VARCHAR(128) NULL,
- phone_number VARCHAR(10) NULL,
- active tinyint(1) NOT NULL DEFAULT 1,
- user_id INT UNSIGNED NOT NULL,
- PRIMARY KEY (id));
+ id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+ first_name VARCHAR(45) NOT NULL,
+ last_name VARCHAR(45) NOT NULL,
+ email VARCHAR(128) NULL,
+ phone_number VARCHAR(10) NULL,
+ facebook_url VARCHAR(45) NULL,
+ twitter_handle VARCHAR(200) NULL,
+ active tinyint(1) NOT NULL DEFAULT 1,
+ user_id INT UNSIGNED NOT NULL,
+ PRIMARY KEY (id));
 
 CREATE TABLE IF NOT EXISTS java302.contact_images (
- id INT UNSIGNED NOT NULL AUTO_INCREMENT,
- contact_id INT UNSIGNED NOT NULL,
- content_type VARCHAR(45) NOT NULL,
- image BLOB NOT NULL,
- PRIMARY KEY (id));
+ id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+ contact_id INT UNSIGNED NOT NULL,
+ content_type VARCHAR(45) NOT NULL,
+ image BLOB NOT NULL,
+ PRIMARY KEY (id));
 
+  
