@@ -6,6 +6,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.users.security.Role;
+
 @Entity
 @Table(name = "user_roles")
 public class UserRole {
@@ -19,7 +21,12 @@ public class UserRole {
 
 	protected UserRole() {}
 
-	public UserRole(long userId, String role) {
+	public UserRole(User user,Role role) {
+		this.userId = user.getId();
+		this.role = role.toString().substring(role.toString().indexOf('_') +1);
+	}
+	
+	public UserRole(User user,String role) {
 		this.userId = userId;
 		this.role = role;
 	}
