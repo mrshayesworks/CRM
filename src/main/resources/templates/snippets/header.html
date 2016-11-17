@@ -8,7 +8,7 @@
 				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Smoothie Co.</a>
+				<a class="navbar-brand" href="#">Dee`s Designer Heels</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
@@ -17,6 +17,10 @@
 				<ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
 					<li><a href="#" onclick="$('#logoutForm').submit();">Logout</a></li>
 				</ul>
+				
+					<li sec:authorize="hasRole('ROLE_ADMIN')"
+                        th:class="${#httpServletRequest.requestURI.contains('user')?'active':null}"><a
+                        href="#" th:href="@{/users}">Users</a></li>
 				<form th:action="@{/logout}" method="post" style="display: none;" id="logoutForm" sec:authorize="isAuthenticated()">
 		            <input type="submit" value="Log Out"/>
 		        </form>
