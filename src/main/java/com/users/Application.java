@@ -20,7 +20,7 @@ public class Application {
 		log.info("Running");
 	}
 
-	// Adds support for the H2 console via the application
+	// Adds support for the H2 console via the application//
 	@Bean
 	ServletRegistrationBean h2servletRegistration() {
 		ServletRegistrationBean registrationBean = new ServletRegistrationBean(new WebServlet());
@@ -32,6 +32,4 @@ public class Application {
 	public SpringSecurityDialect securityDialect() {
 		return new SpringSecurityDialect();
 	}
-	
-
 }
