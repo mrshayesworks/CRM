@@ -7,7 +7,7 @@
     <style type="text/css">
     	.field {
     		display: block;
-    		margin-bottom: 5px;
+    		margin-bottom: 6px;
     	}
     	
     	.field input, .field select {
@@ -20,6 +20,10 @@
     </style>
 </head>
 <body layout:fragment="content">
+body
+{
+background: #FA8072; 
+}
 	<h1>User</h1>
 	<form th:action="@{|/user/create|}" enctype="multipart/form-data" method="POST">
 			

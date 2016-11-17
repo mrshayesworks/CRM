@@ -6,6 +6,11 @@
 </head>
 <body layout:fragment="content">
 	<h1>Contacts</h1>
+	<form th:action="@{|/contact/search|}" method="POST">
+	   <input type="text" placeholder="Search..." name="search" th:value="${search}" />
+	   <input type="submit" th:value="Search"/>
+	</form> 
+	
 	<table>
 		<thead>
 			<tr>
@@ -23,7 +28,6 @@
 				<td th:text="${contact.email}"></td>
 				<td th:text="${contact.phoneNumber}"></td>
 				<td><a href="/" th:href="@{|/contact/${contact.id}|}">Profile</a></td>
-				<td><a href="/" th:href="@{|/contact/${contact.id}|}">Share</a></td>
 			</tr>
 		</tbody>
 	</table>

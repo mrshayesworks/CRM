@@ -31,7 +31,7 @@ import com.users.repositories.UserRoleRepository;
 import com.users.security.PermissionService;
 import com.users.service.EmailService;
 import com.users.service.ImageService;
-
+//TODO Why does this need to be added to the controller?//
 @Controller
 public class IndexController {
 	private static final Logger log = LoggerFactory.getLogger(IndexController.class);
@@ -47,13 +47,13 @@ public class IndexController {
 
 	@Autowired
 	private ImageService imageService;
-	@Autowired
-	EmailService emailService;
 	
 	@Autowired
 	private UserRoleRepository userRoleRepo;
 	
-
+	@Autowired
+	private EmailService emailService;
+	
 	@RequestMapping("/greeting")
 	public String greeting(
 		@RequestParam(value = "name", required = false, defaultValue = "World") String name,
@@ -63,23 +63,6 @@ public class IndexController {
 	return "greeting";
 }
 
-	@RequestMapping(value = "/email/send", method = RequestMethod.POST)
-	public String sendEmail(Email email, Model model) {
-		emailService.sendMessage(email);
-		
-		return "redirect:/";
-	}
-	@RequestMapping(value = "/email/user", method = RequestMethod.GET)
-	public String prepEmailUser(Model model) {
-		String url = "http://localhost:8080/register/";
-
-		model.addAttribute("message", "To join SRM just follow this link: " + url);
-		model.addAttribute("pageTitle", "Invite User");
-		model.addAttribute("subject", "Join me on SRM");
-
-		return "sendMail";
-	}
-	//TODO What did you anticipate this to do//
 	
 	@RequestMapping("/")
 	public String home(Model model) {
@@ -93,6 +76,17 @@ public class IndexController {
 		return "listUsers";
 	}
 
+	@Secured("ROLE_ADMIN")
+	@RequestMapping(value = "/user/search", method = RequestMethod.POST)
+	public String searchUsers(@RequestParam("search") String search, Model model) {
+		log.debug("Searching by " + search);
+		model.addAttribute("users",
+				userRepo.findByLastNameOrFirstNameOrEmailOrTwitterHandleOrFacebookUrlIgnoreCase(
+						search, search, search, search, search));
+		model.addAttribute("search", search);
+		return "listUsers";
+	}
+	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView getLoginPage(@RequestParam Optional<String> error) {
 		return new ModelAndView("login", "error", error);
@@ -112,7 +106,7 @@ public class IndexController {
 	public String profile(@PathVariable long userId, Model model) {
 		model.addAttribute("user", userRepo.findOne(userId));
 
-		if(!permissionService.canAccessUser(userId)) {
+		if (!permissionService.canAccessUser(userId)) {
 			log.warn("Cannot allow user to view " + userId);
 			return "redirect:/";
 		}
@@ -129,7 +123,7 @@ public class IndexController {
 	public String profileEdit(@PathVariable long userId, Model model) {
 		model.addAttribute("user", userRepo.findOne(userId));
 		
-		if(!permissionService.canAccessUser(userId)) {
+		if (!permissionService.canAccessUser(userId)) {
 			log.warn("Cannot allow user to edit " + userId);
 			return "profile";
 		}
@@ -148,7 +142,7 @@ public class IndexController {
 			@RequestParam("file") MultipartFile file,
 			Model model) {
 
-		if(!permissionService.canAccessUser(userId)) {
+		if (!permissionService.canAccessUser(userId)) {
 			log.warn("Cannot allow user to edit " + userId);
 			return "profile";
 		}
@@ -157,7 +151,7 @@ public class IndexController {
 		userRepo.save(user);
 		model.addAttribute("message", "User " + user.getEmail() + " saved.");
 
-		if(removeImage) {
+		if (removeImage) {
 			imageService.deleteImage(user);
 		} else {
 			imageService.saveImage(file, user);
@@ -188,4 +182,21 @@ public class IndexController {
 		return profile(savedUser.getId(), model);
 	}
 	
+	@RequestMapping(value = "/email/send", method = RequestMethod.POST)
+	public String sendEmail(Email email, Model model) {
+		emailService.sendMessage(email);
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/email/user", method = RequestMethod.GET)
+	public String prepEmailUser(Model model) {
+		String url = "http://localhost:8080/register/";
+
+		model.addAttribute("message", "To join SRM just follow this link: " + url);
+		model.addAttribute("pageTitle", "Invite User");
+		model.addAttribute("subject", "Join me on SRM");
+
+		return "sendMail";
+	}	
 }
